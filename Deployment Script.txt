@@ -1,0 +1,27 @@
+1) For creating Cluster in GCP ====>
+gcloud beta container --project "cloud-assignment-330516" clusters create "namespace-1" --zone "asia-south1-c" --no-enable-basic-auth --cluster-version "1.21.4-gke.2300" --release-channel "rapid" --machine-type "n2-highmem-2" --image-type "COS_CONTAINERD" --disk-type "pd-standard" --disk-size "10" --metadata disable-legacy-endpoints=true --scopes "https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" --max-pods-per-node "110" --num-nodes "3" --enable-ip-alias --network "projects/cloud-assignment-330516/global/networks/default" --subnetwork "projects/cloud-assignment-330516/regions/asia-south1/subnetworks/default" --no-enable-intra-node-visibility --default-max-pods-per-node "110" --no-enable-master-authorized-networks --addons HorizontalPodAutoscaling,HttpLoadBalancing,GcePersistentDiskCsiDriver --enable-autoupgrade --enable-autorepair --max-surge-upgrade 1 --max-unavailable-upgrade 0 --enable-shielded-nodes --node-locations "asia-south1-c"
+
+
+2) For all the configurations in project ====>
+gcloud config list --format 'value(core.project)'
+
+
+3) To connect Kubernetes Cluster ====>
+kubectl config current-context
+
+
+4) Port forwardin to local machine ====>
+gcloud container clusters get-credentials cp-cloud-operator --zone us-central1-c --project cloud-assignment-330516 \
+ && kubectl port-forward --namespace operator $(kubectl get pod --namespace operator --selector="type=controlcenter" --output jsonpath='{.items[0].metadata.name}') 8080:9021 
+
+
+ 5) To open bash terminal in a pod ====>
+ kubectl -n namespace-1 exec -it client-console -- bash
+
+
+ 6) For connecting POSTGRES ====>
+ gcloud sql connect postgres --user=postgres --quiet
+
+
+ 7) JDBC connection string to connect to database ====>
+ jdbc:postgresql:///cloud-assignment?cloudSqlInstance=postgres&socketFactory=com.google.cloud.sql.postgres.SocketFactory&user=postgres&password=postgres
