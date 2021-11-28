@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.25.0 (a70f80cc)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: kaf5
+  name: KAF5
+spec:
+  ports:
+    - name: "9095"
+      port: 9095
+      targetPort: 9095
+  selector:
+    io.kompose.service: kaf5
+status:
+  loadBalancer: {}

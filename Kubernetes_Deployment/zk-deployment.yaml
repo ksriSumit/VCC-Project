@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.25.0 (a70f80cc)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: zk
+  name: zk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: zk
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.25.0 (a70f80cc)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: zk
+    spec:
+      containers:
+        - env:
+            - name: ZK_CLIENT_PORT
+              value: "2181"
+            - name: ZK_INIT_LIMIT
+              value: "5"
+            - name: ZK_SERVERS
+              value: ZK:2888:3888
+            - name: ZK_SERVER_ID
+              value: "1"
+            - name: ZK_SYNC_LIMIT
+              value: "2"
+            - name: ZK_TICK_TIME
+              value: "2000"
+          image: confluentinc/cp-ZK:3.0.0
+          livenessProbe:
+            exec:
+              command:
+                - echo stat | nc localhost 2181
+            failureThreshold: 3
+            periodSeconds: 10
+            timeoutSeconds: 10
+          name: ZK
+          ports:
+            - containerPort: 2181
+            - containerPort: 2888
+            - containerPort: 3888
+          resources: {}
+      restartPolicy: Always
+status: {}

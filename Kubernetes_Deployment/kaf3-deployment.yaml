@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.25.0 (a70f80cc)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: kaf3
+  name: kaf3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: kaf3
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.25.0 (a70f80cc)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: kaf3
+    spec:
+      containers:
+        - env:
+            - name: BOOTSTRAP_SERVERS
+              value: KAF1:9091,KAF2:9092,KAF3:9093,KAF4:9094,KAF5:9095
+            - name: KAF_ADVERTISED_LISTENERS
+              value: PLAINTEXT://KAF3:9093
+            - name: KAF_BROKER_ID
+              value: "3"
+            - name: KAF_LISTENERS
+              value: PLAINTEXT://0.0.0.0:9093
+            - name: KAF_ZK_CONNECT
+              value: ZK:2181
+            - name: ZK
+              value: ZK:2181
+          image: confluentinc/cp-KAF:3.0.0
+          livenessProbe:
+            exec:
+              command:
+                - ps augwwx | egrep [S]upportedKAF
+          name: KAF3
+          ports:
+            - containerPort: 9093
+          resources: {}
+      restartPolicy: Always
+status: {}
