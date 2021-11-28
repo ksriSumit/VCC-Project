@@ -1,0 +1,19 @@
+{
+  "name": "postgres-bulk-sink",
+  "config": {
+    "connector.class":"io.confluent.connect.jdbc.JdbcSinkConnector",
+	"bootstrap.servers":"broker.0",
+    "tasks.max":"3",
+    "connection.url":"jdbc:postgresql:///cloud-assignment?cloudSqlInstance=postgres&socketFactory=com.google.cloud.sql.postgres.SocketFactory&user=postgres&password=postgres",
+    "auto.create":"true",
+	"auto.evolve":"true",
+    "topics":"rapid.data.api",
+	"key.converter":"org.apache.kafka.connect.json.JsonConverter",
+    "value.converter":"org.apache.kafka.connect.json.JsonConverter",
+	"key.converter.schemas.enable":"false",
+	"value.converter.schemas.enable":"false",
+	"transforms": "flatten",
+    "transforms.flatten.type": "org.apache.kafka.connect.transforms.Flatten$Value",
+    "transforms.flatten.delimiter": "_"
+  }
+}
